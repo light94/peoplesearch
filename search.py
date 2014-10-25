@@ -1,5 +1,5 @@
 import ezodf
-from xgoogle.search import GoogleSearch
+from xgoogle.search import GoogleSearch, SearchError
 import urllib2
 import time
 
@@ -21,15 +21,21 @@ def search():
 			data = sheet[row,0].value+" "+sheet[row,1].value+" "+sheet[row,3].value
 		
 			searchterm  = encode(data)
-			g = GoogleSearch(searchterm)
-			g.results_per_page = 10
+			try :
+				g = GoogleSearch(searchterm)
+			except SearchError, e :
+				with open("error.txt",'a') as f:
+					f.write(data)
+			else:
 
-			results = g.get_results()
-			i = 5
-			for res in results[:10]:
-				print res.url.encode("utf8")
-				sheet2[row,i].set_value(res.url.encode("utf8"))
-				i =+ 1
+				g.results_per_page = 10
+
+				results = g.get_results()
+				i = 5
+				for res in results[:10]:
+					print res.url.encode("utf8")
+					sheet2[row,i].set_value(res.url.encode("utf8"))
+					i =+ 1
 			# webpage = urllib2.urlopen(res.url.encode("utf8")).read()
 			# if "Kharagpur" in webpage:
 			# 	print "He is a Kgpian"
