@@ -23,24 +23,26 @@ def search():
 			searchterm  = encode(data)
 			try :
 				g = GoogleSearch(searchterm)
-			except SearchError, e :
-				with open("error.txt",'a') as f:
-					f.write(data)
-			else:
-
 				g.results_per_page = 10
-
 				results = g.get_results()
 				i = 5
 				for res in results[:10]:
 					print res.url.encode("utf8")
 					sheet2[row,i].set_value(res.url.encode("utf8"))
 					i =+ 1
+				spreadsheet2.save()
+			except SearchError, e :
+				with open("error.txt",'a') as f:
+					f.write(data)
+
+
+				
+				
 			# webpage = urllib2.urlopen(res.url.encode("utf8")).read()
 			# if "Kharagpur" in webpage:
 			# 	print "He is a Kgpian"
 				
-	spreadsheet2.save()
+	
 
 if __name__ == "__main__":
 	search()
