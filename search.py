@@ -1,6 +1,6 @@
 import ezodf
 from xgoogle.search import GoogleSearch, SearchError
-import urllib2
+from urllib2 import Request,urlopen,HTTPError
 import time
 
 spreadsheet = ezodf.opendoc('probablementors.ods')
@@ -28,22 +28,61 @@ def search():
 				sheet[row,3].set_value("")		 
  
 			data = sheet[row,0].value+" "+sheet[row,1].value+" "+sheet[row,3].value
-		
-			searchterm  = encode(data)
+			print data
+			searchterm1  = encode(data) + " IIT Kharagpur"
+			searchterm2 = "Indian Institute"+ encode(data)
+			searchterm2 = "Kharagpur" + encode(data) 
 			try :
-				g = GoogleSearch(searchterm)
-				g.results_per_page = 10
-				results = g.get_results()
-				i = 5
-				for res in results[:2]:
-					print res.url.encode("utf8")
-					sheet2[row,i].set_value(res.url.encode("utf8"))
-					i = i+1
+				g1 = GoogleSearch(searchterm1)
+				
+				#g3 = GoogleSearch(searchterm3)
+				g1.results_per_page = 10
+				
+				#g3.results_per_page = 10
+				results1 = g1.get_results()
+				
+				#results3 = g3.get_results()
+				status = 0
+				for res in results1[:2]:
+					time.sleep(1)
+					
+					if True:#"linkedin" not in res.url.encode("utf8"): 
+						answer = search_for_kgp(res.url.encode("utf8"))
+						# sheet2[row,5].set_value("Kgpian")
+						if answer == 1:
+							print " Kgpian"
+							status = 1
+							sheet2[row,6].set_value(res.url.encode("utf8"))
+							break
+				if status==0:
+					try:
+						g2 = GoogleSearch(searchterm2)
+						g2.results_per_page = 10
+						results2 = g2.get_results()
+						for res in results2[:2]:
+							time.sleep(1)
+							if True:#"linkedin" not in res.url.encode("utf8"): 
+								answer = search_for_kgp(res.url.encode("utf8"))
+					# sheet2[row,5].set_value("Kgpian")
+								if answer == 1:
+									print  " Kgpian"
+									status = 1
+									sheet2[row,6].set_value(res.url.encode("utf8"))
+									break
+					except SearchError, e :
+						with open("error.txt",'a') as f:
+							f.write(data + "\n")
+					except HTTPError:
+						print "Oops"
+
+				if status == 0:	
+					print  " Probably Not Kgpian"
 				spreadsheet2.save()
 			except SearchError, e :
 				with open("error.txt",'a') as f:
 					f.write(data + "\n")
-
+			except HTTPError:
+						print "Oops"	
 
 				
 				
@@ -53,20 +92,20 @@ def search():
 				
 
 
-def search_for_kgp():
-	for row in range(1,rows):
-		for i in range(2):
-			url = sheet2[row,(i+5)].value
-			print url 
-			if url!= None:
-				webpage = urllib2.urlopen(url).read()
-				if "Kharagpur" in webpage:
-					sheet[row,7].set_value("Kgpian")
-					spreadsheet.save()
-					print "Kgpian"
-					break		
+def search_for_kgp(url):
+	req = Request(url,headers = {'User-Agent': 'Mozilla/5.0'})
+	webpage =  urlopen(req).read()
+	if "Kharagpur" in webpage:
+		
+		return 1
+	else:
+		return 0
+
+
+
+
 
 if __name__ == "__main__":
-	# search()
-	# spreadsheet2.save()
-	search_for_kgp()
+	search()
+	spreadsheet2.save()
+	#search_for_kgp()
