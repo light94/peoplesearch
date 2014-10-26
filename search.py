@@ -9,13 +9,23 @@ spreadsheet2 = ezodf.opendoc('probablementors2.ods')
 sheet2 = spreadsheet2.sheets[0]
 rows = sheet.nrows()
 columns = sheet.ncols()
+last_searched = 1
+with open('last_searched.txt','r') as f:
+	
+	last_searched = int(f.read())
+
+
+	
+row = 0
 
 def encode(data):
 	return data.encode('ascii','ignore')
-
+ 
 
 def search():
-	for row in range(1,rows):
+	for row in range(last_searched,rows):
+		with open('last_searched.txt','w') as f:
+			f.write(str(row))	
 		print row
 		if sheet[row,0].value !=None or sheet[row,1].value !=None or sheet[row,3].value !=None:
 		
@@ -107,5 +117,6 @@ def search_for_kgp(url):
 
 if __name__ == "__main__":
 	search()
+
 	spreadsheet2.save()
 	#search_for_kgp()
