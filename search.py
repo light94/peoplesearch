@@ -92,7 +92,11 @@ def search():
 				with open("error.txt",'a') as f:
 					f.write(data + "\n")
 			except HTTPError:
-						print "Oops"	
+				print "Oops"	
+			except URLError:
+				print "Start again"
+				with open("error.txt",'a') as f:
+					f.write(data + "\n")
 
 				
 				
