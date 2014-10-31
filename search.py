@@ -1,6 +1,7 @@
 import ezodf
 from xgoogle.search import GoogleSearch, SearchError
-from urllib2 import Request,urlopen,HTTPError
+from urllib2 import Request,urlopen,HTTPError,URLError
+from socket import error as SocketError
 import time
 
 spreadsheet = ezodf.opendoc('probablementors.ods')
@@ -84,7 +85,14 @@ def search():
 							f.write(data + "\n")
 					except HTTPError:
 						print "Oops"
-
+					except URLError:
+						print "Start again"
+						with open("error.txt",'a') as f:
+							f.write(data + "\n")
+					except SocketError:
+						with open("error.txt",'a') as f:
+							f.write(data + "\n")
+							
 				if status == 0:	
 					print  " Probably Not Kgpian"
 				spreadsheet2.save()
@@ -97,7 +105,9 @@ def search():
 				print "Start again"
 				with open("error.txt",'a') as f:
 					f.write(data + "\n")
-
+			except SocketError:
+				with open("error.txt",'a') as f:
+					f.write(data + "\n")
 				
 				
 			# webpage = urllib2.urlopen(res.url.encode("utf8")).read()
