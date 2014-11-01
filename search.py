@@ -28,8 +28,9 @@ def search():
 		with open('last_searched.txt','w') as f:
 			f.write(str(row))	
 		print row
-		if sheet[row,0].value !=None or sheet[row,1].value !=None or sheet[row,3].value !=None:
-		
+		if sheet[row,0].value !=None or sheet[row,1].value !=None or sheet[row,3].value !=None and she:
+			if sheet[row,3].value in ["Alumni","Entrepreneurship","Spring","Kshitij","Gopali"] or sheet[row,4].value in ["Student","Core","Member","Team"]:
+				continue
 
 			if type(sheet[row,0].value)!= unicode :
 				sheet[row,0].set_value("")
