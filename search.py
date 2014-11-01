@@ -108,6 +108,9 @@ def search():
 			except SocketError:
 				with open("error.txt",'a') as f:
 					f.write(data + "\n")
+			except ValueError:
+				with open("error.txt",'a') as f:
+					f.write(data + "\n")
 				
 				
 			# webpage = urllib2.urlopen(res.url.encode("utf8")).read()
