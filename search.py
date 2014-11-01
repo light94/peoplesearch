@@ -3,6 +3,7 @@ from xgoogle.search import GoogleSearch, SearchError
 from urllib2 import Request,urlopen,HTTPError,URLError
 from socket import error as SocketError
 import time
+from httplib import IncompleteRead
 
 spreadsheet = ezodf.opendoc('probablementors.ods')
 sheet = spreadsheet.sheets[0]
@@ -20,7 +21,7 @@ with open('last_searched.txt','r') as f:
 row = 0
 
 def encode(data):
-	return data.encode('ascii','ignore')
+	return data.encode('utf-8','ignore')
  
 
 def search():
@@ -93,6 +94,17 @@ def search():
 					except SocketError:
 						with open("error.txt",'a') as f:
 							f.write(data + "\n")
+					except ValueError:
+						with open("error.txt",'a') as f:
+							f.write(data + "\n")
+					except IncompleteRead:
+						with open("error.txt",'a') as f:
+							f.write(data + "\n")
+
+
+
+
+
 							
 				if status == 0:	
 					print  " Probably Not Kgpian"
@@ -110,6 +122,9 @@ def search():
 				with open("error.txt",'a') as f:
 					f.write(data + "\n")
 			except ValueError:
+				with open("error.txt",'a') as f:
+					f.write(data + "\n")
+			except IncompleteRead:
 				with open("error.txt",'a') as f:
 					f.write(data + "\n")
 				
