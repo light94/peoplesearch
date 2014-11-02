@@ -3,7 +3,8 @@ from xgoogle.search import GoogleSearch, SearchError
 from urllib2 import Request,urlopen,HTTPError,URLError
 from socket import error as SocketError
 import time
-from httplib import IncompleteRead
+from httplib import IncompleteRead,BadStatusLine
+
 
 spreadsheet = ezodf.opendoc('probablementors.ods')
 sheet = spreadsheet.sheets[0]
@@ -31,6 +32,7 @@ def search():
 		print row
 		if sheet[row,0].value !=None or sheet[row,1].value !=None or sheet[row,3].value !=None and she:
 			if sheet[row,3].value in ["Alumni","Entrepreneurship","Spring","Kshitij","Gopali"] or sheet[row,4].value in ["Student","Core","Member","Team"]:
+				print "Probably a Random Student"
 				continue
 
 			if type(sheet[row,0].value)!= unicode :
@@ -100,6 +102,9 @@ def search():
 					except IncompleteRead:
 						with open("error.txt",'a') as f:
 							f.write(data + "\n")
+					except BadStatusLine:
+						with open("error.txt",'a') as f:
+							f.write(data + "\n")
 
 
 
@@ -127,6 +132,10 @@ def search():
 			except IncompleteRead:
 				with open("error.txt",'a') as f:
 					f.write(data + "\n")
+			except BadStatusLine:
+				with open("error.txt",'a') as f:
+					f.write(data + "\n")
+		
 				
 				
 			# webpage = urllib2.urlopen(res.url.encode("utf8")).read()
