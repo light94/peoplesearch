@@ -87,7 +87,7 @@ def search():
 
 					except KeyBoardInterrupt:
 						raise
-					except
+					except:
 						with open("error.txt",'a') as f:
 							f.write(data + "\n")
 												
@@ -96,7 +96,7 @@ def search():
 				spreadsheet2.save()
 			except KeyBoardInterrupt:
 				raise
-			except
+			except:
 				with open("error.txt",'a') as f:
 					f.write(data + "\n")
 			
