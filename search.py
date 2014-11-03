@@ -84,58 +84,22 @@ def search():
 									status = 1
 									sheet2[row,6].set_value(res.url.encode("utf8"))
 									break
-					except SearchError, e :
-						with open("error.txt",'a') as f:
-							f.write(data + "\n")
-					except HTTPError:
-						print "Oops"
-					except URLError:
-						print "Start again"
-						with open("error.txt",'a') as f:
-							f.write(data + "\n")
-					except SocketError:
-						with open("error.txt",'a') as f:
-							f.write(data + "\n")
-					except ValueError:
-						with open("error.txt",'a') as f:
-							f.write(data + "\n")
-					except IncompleteRead:
-						with open("error.txt",'a') as f:
-							f.write(data + "\n")
-					except BadStatusLine:
-						with open("error.txt",'a') as f:
-							f.write(data + "\n")
 
-
-
-
-
-							
+					except KeyBoardInterrupt:
+						raise
+					except
+						with open("error.txt",'a') as f:
+							f.write(data + "\n")
+												
 				if status == 0:	
 					print  " Probably Not Kgpian"
 				spreadsheet2.save()
-			except SearchError, e :
+			except KeyBoardInterrupt:
+				raise
+			except
 				with open("error.txt",'a') as f:
 					f.write(data + "\n")
-			except HTTPError:
-				print "Oops"	
-			except URLError:
-				print "Start again"
-				with open("error.txt",'a') as f:
-					f.write(data + "\n")
-			except SocketError:
-				with open("error.txt",'a') as f:
-					f.write(data + "\n")
-			except ValueError:
-				with open("error.txt",'a') as f:
-					f.write(data + "\n")
-			except IncompleteRead:
-				with open("error.txt",'a') as f:
-					f.write(data + "\n")
-			except BadStatusLine:
-				with open("error.txt",'a') as f:
-					f.write(data + "\n")
-		
+			
 				
 				
 			# webpage = urllib2.urlopen(res.url.encode("utf8")).read()
